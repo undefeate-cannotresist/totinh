@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tim Anh Rớt Rồi Nè Em Có Thấy Không</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffdce5;
+      font-family: 'Comic Sans MS', cursive;
+      overflow: hidden;
+      position: relative;
+      height: 100vh;
+    }
+
+    #angel {
+      position: absolute;
+      bottom: 60px;
+      left: 20px;
+      width: 200px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    #arrow, #arrowHead, #arrowTail {
+      position: absolute;
+      width: 140px;
+      display: none;
+      z-index: 5;
+      transform-origin: 0% 50%;
+    }
+
+    #arrow {
+      transition: transform 1.5s ease-out;
+    }
+
+    #arrowHead, #arrowTail {
+      width: 40px;
+      z-index: 6;
+    }
+
+    #bigHeart {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      z-index: 1;
+    }
+
+    #letter {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      display: none;
+      width: 300px;
+      text-align: center;
+      font-size: 1.1rem;
+      z-index: 999;
+    }
+
+    .heart-pop {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center;
+      background-size: contain;
+      opacity: 0.9;
+      pointer-events: none;
+      transition: transform 1s ease-out, opacity 1s;
+      z-index: 100;
+    }
+
+    .heart-hit {
+      animation: heartHit 0.6s ease-out;
+    }
+
+    @keyframes heartHit {
+      0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); filter: brightness(1); }
+      25% { transform: translate(-50%, -50%) scale(1.2) rotate(-5deg); filter: brightness(1.3); }
+      50% { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); filter: brightness(1.5); }
+      75% { transform: translate(-50%, -50%) scale(1.15) rotate(-3deg); filter: brightness(1.2); }
+      100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); filter: brightness(1); }
+    }
+
+    .petal {
+      position: absolute;
+      width: 70px;
+      height: 70px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      animation: fall 5s linear infinite;
+      opacity: 1;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10%) rotate(0deg); }
+      100% { transform: translateY(110vh) rotate(360deg); }
+    }
+
+    .firework {
+      position: absolute;
+      font-size: 40px;
+      transition: transform 1s ease-out, opacity 1s;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* ❤️ Tim rơi như cánh hoa */
+    .falling-heart {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center;
+      background-size: contain;
+      animation: fall 5s linear;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .container {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .envelope-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: block;
+      transform: translate(-50%, -20%);
+    }
+    
+    .envelope {
+      position: relative;
+      display: block;
+      width: 300px;
+      height: 200px;
+      margin: auto;
+      background-color: #C9D0D2;
+    }
+    
+    .envelope .envelope__card {
+      position: absolute;
+      bottom: 0;
+      display: block;
+      width: 250px;
+      height: 200px;
+      margin: 0 25px;
+      background-color: #f5f6d6;
+    }
+    
+    .envelope .envelope__card.open {
+      -webkit-animation: cardJump .5s ease .5s forwards;
+      -o-animation: cardJump .5s ease .5s forwards;
+      animation: cardJump .5s ease .5s forwards;
+      z-index: 1;
+    }
+    
+    .envelope .enveloper__card-text {
+      padding: 10px 20px;
+      font-size: 42px;
+      margin: 0;
+      color: black;
+      font-family: 'Amatic SC', cursive;
+    }
+    
+    .envelope .envelope__side {
+      position: absolute;
+      top: 0;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      z-index: 2;
+    }
+    
+    .envelope .envelope__side--left {
+      left: 0;
+      border-width: 100px 0 100px 150px;
+      border-color: transparent transparent transparent #ffffff;
+    }
+    
+    .envelope .envelope__side--right {
+      right: 0;
+      border-width: 100px 150px 100px 0;
+      border-color: transparent #ffffff transparent transparent;
+    }
+    
+    .envelope .envelope__side--bottom {
+      top: auto;
+      left: 0;
+      bottom: 0;
+      border-width: 0 150px 100px 150px;
+      border-color: transparent transparent #ecf0f1 transparent;
+    }
+    
+    .envelope .envelope__side--top {
+      top: 0;
+      left: 0;
+      bottom: auto;
+      border-width: 100px 150px 0 150px;
+      border-color: #ecf0f1 transparent transparent transparent;
+      z-index: 1;
+    }
+    
+    .envelope.open > .envelope__side--top {
+      top: -100px;
+      border-width: 0 150px 100px 150px;
+      border-color: transparent transparent #C9D0D2 transparent;
+    }
+    
+    .heart {
+      position: relative;
+      top: 50%;
+      left: 40%;
+      margin-top: -75%;
+      margin-bottom: 50%;
+      margin-left: -25px;
+      width: 50px;
+      fill: red;
+      z-index: 2;
+      transition: 0.2s;
+    }
+    
+    .envelope:hover .heart {
+      transform: scale(1.2);
+      transition: .5s ease;
+    }
+    
+    .envelope.open:hover .heart {
+      transform: none;
+    }
+    
+    .tossing{
+      animation-name: tossing;
+      -webkit-animation-name: tossing;
+    
+      animation-duration: .5s;
+      -webkit-animation-duration: .5s;
+    
+      animation-iteration-count: infinite;
+      -webkit-animation-iteration-count: infinite;
+    
+      -webkit-animation-timing-function: ease;
+      animation-timing-function: ease;
+    }
+    @keyframes cardJump {
+      0%   { transform: translateY(0); }
+      100% { transform: translateY(-180px); }
+    }
+    @keyframes wiggle {
+      0% { transform: translate(-50%, -20%) rotate(0deg); }
+      25% { transform: translate(-50%, -20%) rotate(2deg); }
+      50% { transform: translate(-50%, -20%) rotate(-2deg); }
+      75% { transform: translate(-50%, -20%) rotate(2deg); }
+      100% { transform: translate(-50%, -20%) rotate(0deg); }
+    }
+    
+    .envelope-wrapper.wiggle {
+      animation: wiggle 1s ease-in-out infinite;
+    }
+    #heartInsideEnvelope {
+      position: absolute;
+      bottom: 20px; /* Vị trí của tim trong lá thư */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+      fill: red; /* Màu của tim */
+      opacity: 0; /* Mới bắt đầu ẩn */
+      animation: heartFly 2s ease forwards; /* Thêm hiệu ứng bay lên */
+    }
+    
+    /* Hiệu ứng tim bay lên từ trong lá thư */
+    @keyframes heartFly {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(-50px) scale(1.2); /* Tăng kích thước khi bay lên */
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-150px) scale(0); /* Tim biến mất khi bay lên */
+      }
+    }
+    
+    /* Định nghĩa tim ngoài lá thư, sẽ tạo nhiều trái tim bay ra */
+    .heart-inside {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      clip-path: polygon(50% 0%, 0% 40%, 50% 100%, 100% 40%);
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      animation: heartFlyOut 2s forwards;
+    }
+    
+    /* Hiệu ứng cho tim bay ra ngoài */
+    @keyframes heartFlyOut {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -150%) scale(1.5); /* Bay lên trên và phóng to */
+      }
+    }
+    .envelope {
+      position: relative;
+    }
+    
+    .heart-emoji {
+      position: absolute;
+      font-size: 20px;
+      animation: heartFlyOut 2s forwards;
+      opacity: 0;
+    }
+    
+    @keyframes heartFlyOut {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) scale(1.5);
+        opacity: 0;
+      }
+    }
+    
+  
+
+      .heart-pop {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center;
+        background-size: contain;
+        opacity: 0.9;
+        pointer-events: none;
+        transition: transform 1s ease-out, opacity 1s;
+        z-index: 100;
+      }
+      
+    
+    
+  </style>
+</head>
+<body>
+
+  <img id="angel" src="thienthan.png" alt="Angel" onclick="shootArrow()">
+  <img id="arrow" src="muiten.png" alt="Arrow">
+  <img id="arrowHead" src="daumuiten.png" alt="Arrow Head">
+  <img id="arrowTail" src="duoimuiten.png" alt="Arrow Tail">
+  <img id="bigHeart" src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="Big Heart" onclick="showLetter()">
+  <div class="envelope-wrapper" id="envelopeWrapper" style="display: none;">
+    <div class="envelope" id="envelope">
+      <div class="envelope__side envelope__side--left"></div>
+      <div class="envelope__side envelope__side--right"></div>
+      <div class="envelope__side envelope__side--bottom"></div>
+      <div class="envelope__side envelope__side--top"></div>
+      <div class="envelope__card" id="envelopeCard" style="overflow-y: auto; max-height: 150px; padding: 8px;">
+        <div class="enveloper__card-text" style="white-space: pre-line; font-size: 12px; line-height: 1.4;">
+          Dear Crush,💌
+
+          You were once just a variable...  
+          Until you became the constant in my life.💘  
+          From the very first time I saw you,  
+          I fell for your eyes —  
+          like a function with no arguments,  
+          yet returning infinite emotions.
+          I'm not good with words,  
+          so I let my heart write the code.  
+          Every line is a silent confession —  
+          debugged for hours,  
+          but I never wanted to stop.
+          This love isn’t a global variable  
+          that can be changed.  
+          It’s a const in my heart,  
+          and it will never reset.
+
+          With love,  
+          Your Thang 🫶
+        </div>
+      </div>
+        <div id="heartInsideEnvelope" class="heart-inside"></div> <!-- Thêm trái tim trong thư -->
+      </div>
+      <svg class="heart"></svg>
+      <svg class="heart" viewBox="0 0 32 29.6">
+        <path d="M23.6,0c-3.4,0-6.4,2.1-7.6,5.1C14.8,2.1,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4
+          c0,9.5,16,21.2,16,21.2s16-11.7,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+      </svg>
+    </div>
+  </div>
+  
+
+  <script>
+    function createHeartsFromLetter() {
+      const letter = document.querySelector('.letter');
+      const rect = letter.getBoundingClientRect();
+      const heartCount = 30;
+  
+      for (let i = 0; i < heartCount; i++) {
+          const heart = document.createElement('div');
+          heart.className = 'heart';
+          heart.textContent = '❤️';
+  
+          // Randomize initial position near the letter
+          heart.style.left = (rect.left + rect.width / 2 + (Math.random() - 0.5) * 50) + 'px';
+          heart.style.top = (rect.top + (Math.random() - 0.5) * 30) + 'px';
+  
+          // Randomize size and animation
+          const size = Math.random() * 10 + 10;
+          heart.style.fontSize = size + 'px';
+          heart.style.position = 'fixed';
+          heart.style.opacity = '1';
+          heart.style.pointerEvents = 'none';
+          heart.style.transition = 'transform 2s ease-out, opacity 2s ease-out';
+  
+          document.body.appendChild(heart);
+  
+          setTimeout(() => {
+              const xMove = (Math.random() - 0.5) * 200;
+              const yMove = -Math.random() * 200 - 100;
+              heart.style.transform = `translate(${xMove}px, ${yMove}px) scale(0.5)`;
+              heart.style.opacity = '0';
+          }, 100);
+  
+          // Remove heart after animation
+          setTimeout(() => {
+              heart.remove();
+          }, 2200);
+      }
+  }
+  
+  function createFlyingHearts(count = 10) {
+    const container = document.body;
+    for (let i = 0; i < count; i++) {
+      const heart = document.createElement("div");
+      heart.className = 'heart';
+      heart.textContent = "❤️";
+      
+      // Random vị trí và delay để hiệu ứng tự nhiên hơn
+      heart.style.position = "absolute"; // cần position absolute để có thể di chuyển
+      heart.style.left = `${Math.random() * window.innerWidth}px`; // random vị trí X
+      heart.style.top = `${Math.random() * window.innerHeight}px`; // random vị trí Y
+      
+      // Thêm animation delay để các trái tim xuất hiện ngẫu nhiên
+      heart.style.animationDelay = `${Math.random() * 0.5}s`;
+      
+      // Tạo animation bay lên và mờ dần
+      heart.style.animation = "flyHeart 2s ease-in-out forwards";
+      
+      container.appendChild(heart);
+      
+      // Xoá tim sau khi animation xong (2 giây)
+      setTimeout(() => {
+        container.removeChild(heart);
+      }, 2000);
+    }
+  }
+  
+    function createHeartsFromLetter() {
+      const letter = document.querySelector(".letter"); // hoặc id nếu cần
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement("span");
+        heart.classList.add("heart-emoji");
+        heart.textContent = "❤️";
+    
+        // Random vị trí và hiệu ứng bay
+        heart.style.left = Math.random() * 100 + "%";
+        heart.style.top = Math.random() * 100 + "%";
+        letter.appendChild(heart);
+    
+        setTimeout(() => {
+          heart.remove();
+        }, 2000);
+      }
+    }
+    
+    
+    function shootArrow() {
+      const angel = document.getElementById("angel");
+      const heart = document.getElementById("bigHeart");
+      const arrow = document.getElementById("arrow");
+      const head = document.getElementById("arrowHead");
+      const tail = document.getElementById("arrowTail");
+
+      const angelRect = angel.getBoundingClientRect();
+      const heartRect = heart.getBoundingClientRect();
+
+      const scale = angelRect.width / 768;
+      const offsetXInImage = 630;
+      const offsetYInImage = 230;
+      const startX = angelRect.left + offsetXInImage * scale;
+      const startY = angelRect.top + offsetYInImage * scale;
+
+      const targetX = heartRect.left + heartRect.width / 2;
+      const targetY = heartRect.top + heartRect.height / 2;
+
+      const dx = targetX - startX;
+      const dy = targetY - startY;
+      const angleRad = Math.atan2(dy, dx);
+      const angleDeg = angleRad * 180 / Math.PI;
+      const arrowLength = Math.sqrt(dx*dx + dy*dy);
+
+      arrow.style.display = "block";
+      arrow.style.transition = "none";
+      arrow.style.left = `${startX}px`;
+      arrow.style.top = `${startY - 28}px`;
+      arrow.style.transformOrigin = "0% 50%";
+      arrow.style.transform = `rotate(${angleDeg}deg) translate(0px, 0px)`;
+      arrow.offsetHeight;
+
+      void arrow.offsetWidth;
+      const shortDistance = arrowLength - 130;
+
+      requestAnimationFrame(() => {
+        arrow.style.transition = "transform 0.5s ease-out";
+        arrow.style.transform = `rotate(${angleDeg}deg) translate(${shortDistance}px, 0px)`;
+      });
+
+      setTimeout(() => {
+        arrow.style.display = "none";
+        head.style.display = "block";
+        tail.style.display = "block";
+
+        head.style.transform = tail.style.transform = `rotate(${angleDeg}deg)`;
+        const spread = 40;
+        head.style.left = `${targetX + Math.cos(angleRad) * spread + 10}px`;
+        head.style.top = `${targetY + Math.sin(angleRad) * spread - 30}px`;
+        tail.style.left = `${targetX - Math.cos(angleRad) * spread - 30}px`;
+        tail.style.top = `${targetY - Math.sin(angleRad) * spread - 20}px`;
+        head.style.transform = `rotate(${angleDeg}deg) scale(1.5)`;
+        tail.style.transform = `rotate(${angleDeg}deg) scale(1.5)`;
+
+        heart.classList.add("heart-hit");
+
+        const heartExplosionInterval = setInterval(() =>{
+          triggerHeartExplosion(targetX, targetY);
+        }, 500);// 💖 Thêm hiệu ứng bắn ra trái tim liên tục
+        setTimeout(() => {
+          clearInterval(heartExplosionInterval);// dừng hiệu ứng bắn ra trái tim
+          // ẩn mũi tên và đầu mũi tên
+          head.style.display = "none";
+          tail.style.display = "none";
+          // nổ trái tim 
+          heart.style.transition = "transform 1s ease-out, opacity 1s";
+          heart.style.transform = "scale(3)";
+          heart.style.opacity = "0";
+          setTimeout(() => {
+            heart.style.display = "none";
+          
+            showenvelopeWrapper();
+
+            // Hiện hộp thư sau khi trái tim biến mất
+            const envelopeWrapper = document.getElementById("envelopeWrapper");
+            const envelope = document.getElementById("envelope");
+            const envelopeCard = document.getElementById("envelopeCard");
+
+            envelopeWrapper.style.display = "block"; // hiện hộp thư
+            envelopeWrapper.classList.add("wiggle");
+            envelopeWrapper.addEventListener("click", () => {
+              envelope.classList.add("open");      // bật nắp
+              envelopeCard.classList.add("open");  // thư bay lên
+              envelopeWrapper.classList.remove("wiggle");
+              const heartInsideEnvelope = document.getElementById("heartInsideEnvelope");
+              const heartExplosionInterval = setInterval(() =>{
+                triggerHeartExplosion(targetX, targetY);
+              }, 500);
+              setTimeout(() => {
+                clearInterval(heartExplosionInterval);// dừng hiệu ứng bắn ra trái tim
+                heartInsideEnvelope.style.opacity = "1"; // hiện trái tim trong lá thư
+                heartInsideEnvelope.style.animation = "heartFly 2s ease forwards"; // thêm hiệu ứng bay lên cho trái tim
+                heartInsideEnvelope.style.pointerEvents = "none"; // không cho click vào trái tim trong lá thư
+                createFlyingHearts(20); // Tạo nhiều trái tim bay ra từ trong lá thư
+              }, 1000);
+              setTimeout(() => {
+                heartInsideEnvelope.style.opacity = "0"; // ẩn trái tim trong lá thư sau 2 giây
+                heartInsideEnvelope.remove(); // xóa trái tim trong lá thư
+              }, 2000);
+            });
+          }, 1000);
+        }, 5000);
+
+       
+        triggerPetals();
+        triggerFirework(targetX, targetY);
+        triggerFallingHearts(20); // 💖 Thêm mưa tim rơi
+      }, 400);
+    }
+    function showenvelopeWrapper() {
+      const envelopeWrapper = document.getElementById("envelopeWrapper");
+      const envelope = document.getElementById("envelope");
+      const envelopeCard = document.getElementById("envelopeCard");
+      const heartInsideEnvelope = document.getElementById("heartInsideEnvelope"); 
+    
+      envelopeWrapper.style.display = "block";
+      envelopeWrapper.classList.add("wiggle"); // thư rung rinh
+    
+      //  Click mới mở
+      envelopeWrapper.addEventListener("click", () => {
+        envelope.classList.add("open");       // mở nắp thư
+        envelopeCard.classList.add("open");   // thư bay lên
+        envelopeWrapper.classList.remove("wiggle"); // ngừng rung
+        createHeartsFromLetter();// Tạo tim bay ra từ trong lá thư
+      }, { once: true }); 
+      }
+    
+    function triggerPetals() {
+      const petalImages = ['canhhoa1.png', 'canhhoa2.png', 'canhhoa.png'];
+      for (let i = 0; i < 30; i++) {
+        const petal = document.createElement("div");
+        petal.classList.add("petal");
+        const img = petalImages[Math.floor(Math.random() * petalImages.length)];
+        petal.style.backgroundImage = `url('${img}')`;
+        petal.style.left = Math.random() * window.innerWidth + "px";
+        petal.style.top = Math.random() * 100 + "px";
+        petal.style.animationDuration = `${3 + Math.random() * 2}s`;
+        document.body.appendChild(petal);
+        setTimeout(() => petal.remove(), 6000);
+      }
+    }
+
+    function triggerHeartExplosion(x, y) {
+      for (let i = 0; i < 15; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("heart-pop");
+        heart.style.left = `${x}px`;
+        heart.style.top = `${y}px`;
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 80 + 40;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+
+        document.body.appendChild(heart);
+
+        requestAnimationFrame(() => {
+          heart.style.transform = `translate(${dx}px, ${dy}px) scale(1.5)`;
+          heart.style.opacity = "0";
+        });
+
+        setTimeout(() => heart.remove(), 1000);
+      }
+    }
+
+    function triggerFallingHearts(count = 20) {
+      for (let i = 0; i < count; i++) {
+        const heart = document.createElement("div");
+        heart.classList.add("falling-heart");
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.top = Math.random() * -100 + "px";
+        heart.style.animationDuration = `${3 + Math.random() * 2}s`;
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }
+    }
+    function triggerFirework(x, y) {
+      const fireworkImages = ['phaohoa1.png', 'phaohoa2.png', 'phaohoa3.png'];
+    
+      for (let i = 0; i < 20; i++) { // 5 pháo hoa mỗi lần nổ
+        const randomImg = fireworkImages[Math.floor(Math.random() * fireworkImages.length)];
+    
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 60 + 30;
+        const offsetX = Math.cos(angle) * distance;
+        const offsetY = Math.sin(angle) * distance;
+    
+        const firework = document.createElement("div");
+        firework.classList.add("firework");
+        firework.style.left = `${x + offsetX + 10}px`;
+        firework.style.top = `${y + offsetY +10}px`;
+        firework.style.opacity = "1";
+        firework.style.transform = "scale(1)";
+    
+        const img = document.createElement("img");
+        img.src = randomImg;
+        img.style.width = "100px";
+        img.style.height = "auto";
+    
+        firework.appendChild(img);
+        document.body.appendChild(firework);
+    
+        requestAnimationFrame(() => {
+          firework.style.transform = "scale(1.5)";
+          firework.style.opacity = "0";
+        });
+    
+        setTimeout(() => firework.remove(), 1200);
+      }
+    }
+
+    
+  </script>
+</body>
+</html>
